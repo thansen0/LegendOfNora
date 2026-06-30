@@ -2,6 +2,8 @@
 
 #include <raylib.h>
 
+#include "assets/ground.hpp"
+
 class FirstLevel
 {
 public:
@@ -24,9 +26,9 @@ private:
 
     int screenWidth = 800;
     int screenHeight = 600;
-    float floorY = 0.0f;
 
     Texture2D backgroundTexture{};
+    Ground ground{};
 
     void DrawBackground();
 

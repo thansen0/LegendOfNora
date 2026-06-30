@@ -1,6 +1,11 @@
+add_subdirectory(assets)
 add_subdirectory(levels)
 
 add_executable(LegendOfNora main.cpp)
+
+set_target_properties(LegendOfNora PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 
 target_include_directories(LegendOfNora PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(LegendOfNora PRIVATE levels raylib)
