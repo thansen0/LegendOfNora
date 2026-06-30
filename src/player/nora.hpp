@@ -1,14 +1,18 @@
 #pragma once
 
-class Nora {
-private:
-    int PLAYER_SIZE;
-    int books_collected{0};
-
+class Nora
+{
 public:
     Nora();
 
     void Init();
     void Draw(int playerX, int playerY);
     void Cleanup();
+
+    void CollectBook();
+    [[nodiscard]] int GetBooksCollected() const { return booksCollected; }
+
+private:
+    int playerSize;
+    int booksCollected{0};
 };

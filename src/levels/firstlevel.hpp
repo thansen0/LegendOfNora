@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 #include "assets/ground.hpp"
+#include "book/book_spawner.hpp"
 #include "player/nora.hpp"
 #include "metadata/metadata.hpp"
 
@@ -32,6 +33,7 @@ private:
     Texture2D backgroundTexture{};
     Ground ground{};
     Nora nora{};
+    BookSpawner books{};
 
     void DrawBackground();
 

@@ -11,5 +11,8 @@ namespace metadata {
     const string_view STATIC_BACKGROUND_PEACEFUL{"assets/background/congobackground.jpg"};
     const string_view STATIC_BACKGROUND_OMINOUS{"assets/background/ominous-congobackground.jpg"};
 
+    const string_view BOOK_TEXTURE{"assets/items/book_64.png"};
+
     const int PLAYER_SIZE{40};
+    const int BOOK_SIZE{64};
 }

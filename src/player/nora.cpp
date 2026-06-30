@@ -1,19 +1,26 @@
 #include "nora.hpp"
+
 #include "metadata/metadata.hpp"
 
 #include <raylib.h>
 
-Nora::Nora() : PLAYER_SIZE{metadata::PLAYER_SIZE} {}
+Nora::Nora() : playerSize(metadata::PLAYER_SIZE) {}
 
-void Nora::Init() {
-    books_collected = 0;
+void Nora::Init()
+{
+    booksCollected = 0;
 }
 
-void Nora::Draw(int playerX, int playerY) {
-    DrawRectangle(playerX, playerY, static_cast<int>(PLAYER_SIZE),
-                  static_cast<int>(PLAYER_SIZE), GRAY);
+void Nora::Draw(const int playerX, const int playerY)
+{
+    DrawRectangle(playerX, playerY, playerSize, playerSize, GRAY);
 }
 
-void Nora::Cleanup() {
-    // do nothing as of now...
+void Nora::CollectBook()
+{
+    ++booksCollected;
+}
+
+void Nora::Cleanup()
+{
 }

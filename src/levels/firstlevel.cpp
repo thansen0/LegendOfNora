@@ -6,7 +6,8 @@ namespace
 {
     constexpr float FORWARD_SPEED = 200.0f;
     constexpr float GRAVITY = 900.0f;
-    constexpr float JUMP_VELOCITY = -380.0f;
+    // constexpr float JUMP_VELOCITY = -380.0f;
+    constexpr float JUMP_VELOCITY = -480.0f;
 }
 
 const char* FirstLevel::ResolveAssetPath(const char* relativePath)
@@ -42,6 +43,7 @@ void FirstLevel::Init()
     grounded = true;
 
     nora.Init();
+    books.Init(ground.GetFloorY());
 
     const char* backgroundPath = ResolveAssetPath("assets/background/congobackground.jpg");
     Image backgroundImage = LoadImage(backgroundPath);
@@ -82,6 +84,9 @@ void FirstLevel::Update()
         playerVelY = JUMP_VELOCITY;
         grounded = false;
     }
+
+    books.Update(scrollOffset, screenWidth);
+    books.CheckCollections(playerX, playerY, static_cast<float>(metadata::PLAYER_SIZE), scrollOffset, nora);
 }
 
 void FirstLevel::Draw()
@@ -90,18 +95,21 @@ void FirstLevel::Draw()
 
     DrawBackground();
 
-    // draw ground pieces
     ground.Draw(scrollOffset, screenWidth);
+    books.Draw(scrollOffset);
 
-    // drawing player
     nora.Draw(static_cast<int>(playerX), static_cast<int>(playerY));
+
+    DrawText(TextFormat("Books: %d", nora.GetBooksCollected()), 10, 10, 20, WHITE);
 
     EndDrawing();
 }
 
 void FirstLevel::Cleanup()
 {
+    books.Cleanup();
     ground.Cleanup();
+    nora.Cleanup();
 
     if (backgroundTexture.id != 0)
     {

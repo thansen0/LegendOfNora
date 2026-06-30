@@ -1,0 +1,29 @@
+#pragma once
+
+#include "book/book.hpp"
+
+class Nora;
+
+class BookSpawner
+{
+public:
+    void Init(float floorY);
+    void Update(float scrollOffset, int screenWidth);
+    void Draw(float scrollOffset) const;
+    void CheckCollections(float playerX, float playerY, float playerSize, float scrollOffset, Nora& nora);
+    void Cleanup();
+
+private:
+    static constexpr int POOL_SIZE = 16;
+    static constexpr float MIN_SPAWN_GAP = 64.0f;
+    static constexpr float MAX_SPAWN_GAP = 300.0f;
+    static constexpr float JUMP_HEIGHT_OFFSET = 94.0f;
+
+    Book books[POOL_SIZE]{};
+    float floorY = 0.0f;
+    float nextSpawnWorldX = 0.0f;
+
+    Book* GetInactiveBook();
+    void SpawnBook(float scrollOffset, int screenWidth);
+    void CullOffscreen(float scrollOffset);
+};
