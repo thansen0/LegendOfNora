@@ -54,10 +54,21 @@ void BookSpawner::CullOffscreen(const float scrollOffset)
     }
 }
 
+void BookSpawner::Deactivate()
+{
+    active = false;
+
+    for (Book& book : books)
+    {
+        book.Despawn();
+    }
+}
+
 void BookSpawner::Init(const float floorY)
 {
     this->floorY = floorY;
     nextSpawnWorldX = 0.0f;
+    active = true;
 
     Book::LoadAssets();
 
@@ -71,6 +82,11 @@ void BookSpawner::Init(const float floorY)
 
 void BookSpawner::Update(const float scrollOffset, const int screenWidth)
 {
+    if (!active)
+    {
+        return;
+    }
+
     CullOffscreen(scrollOffset);
 
     if (scrollOffset + static_cast<float>(screenWidth) >= nextSpawnWorldX)
@@ -81,6 +97,11 @@ void BookSpawner::Update(const float scrollOffset, const int screenWidth)
 
 void BookSpawner::Draw(const float scrollOffset) const
 {
+    if (!active)
+    {
+        return;
+    }
+
     for (const Book& book : books)
     {
         book.Draw(scrollOffset);
@@ -90,6 +111,11 @@ void BookSpawner::Draw(const float scrollOffset) const
 void BookSpawner::CheckCollections(const float playerX, const float playerY, const float playerSize,
                                    const float scrollOffset, Nora& nora)
 {
+    if (!active)
+    {
+        return;
+    }
+
     for (Book& book : books)
     {
         if (!book.IsActive())

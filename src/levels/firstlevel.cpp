@@ -6,7 +6,6 @@ namespace
 {
     constexpr float FORWARD_SPEED = 200.0f;
     constexpr float GRAVITY = 900.0f;
-    // constexpr float JUMP_VELOCITY = -380.0f;
     constexpr float JUMP_VELOCITY = -480.0f;
 }
 
@@ -33,10 +32,35 @@ void FirstLevel::DrawBackground()
     }
 }
 
+void FirstLevel::DrawScreenFade()
+{
+    if (screenFade <= 0.0f)
+    {
+        return;
+    }
+
+    const unsigned char alpha = static_cast<unsigned char>(screenFade * 255.0f);
+    DrawRectangle(0, 0, screenWidth, screenHeight, {0, 0, 0, alpha});
+}
+
+void FirstLevel::BeginGorillaEncounter()
+{
+    if (gorillaEncounter)
+    {
+        return;
+    }
+
+    gorillaEncounter = true;
+    books.Deactivate();
+    gorilla.Enter(scrollOffset, screenWidth, ground.GetFloorY());
+}
+
 void FirstLevel::Init()
 {
     screenWidth = GetScreenWidth();
     screenHeight = GetScreenHeight();
+    gorillaEncounter = false;
+    screenFade = 0.0f;
 
     ground.Init(GroundStyle::Main);
     playerY = ground.GetFloorY() - metadata::PLAYER_SIZE;
@@ -85,8 +109,21 @@ void FirstLevel::Update()
         grounded = false;
     }
 
-    books.Update(scrollOffset, screenWidth);
-    books.CheckCollections(playerX, playerY, static_cast<float>(metadata::PLAYER_SIZE), scrollOffset, nora);
+    if (books.IsActive())
+    {
+        books.Update(scrollOffset, screenWidth);
+        books.CheckCollections(playerX, playerY, static_cast<float>(metadata::PLAYER_SIZE), scrollOffset, nora);
+
+        if (nora.GetBooksCollected() >= metadata::BOOKS_TO_COMPLETE_LVL1)
+        {
+            BeginGorillaEncounter();
+        }
+    }
+
+    if (gorillaEncounter)
+    {
+        screenFade = gorilla.GetFadeAlpha(scrollOffset, playerX);
+    }
 }
 
 void FirstLevel::Draw()
@@ -97,10 +134,12 @@ void FirstLevel::Draw()
 
     ground.Draw(scrollOffset, screenWidth);
     books.Draw(scrollOffset);
+    gorilla.Draw(scrollOffset);
 
     nora.Draw(static_cast<int>(playerX), static_cast<int>(playerY));
 
     DrawText(TextFormat("Books: %d", nora.GetBooksCollected()), 10, 10, 20, WHITE);
+    DrawScreenFade();
 
     EndDrawing();
 }
@@ -108,6 +147,7 @@ void FirstLevel::Draw()
 void FirstLevel::Cleanup()
 {
     books.Cleanup();
+    gorilla.Cleanup();
     ground.Cleanup();
     nora.Cleanup();
 

@@ -1,6 +1,7 @@
 add_subdirectory(assets)
 add_subdirectory(player)
 add_subdirectory(book)
+add_subdirectory(entities)
 add_subdirectory(levels)
 
 add_executable(LegendOfNora main.cpp)
