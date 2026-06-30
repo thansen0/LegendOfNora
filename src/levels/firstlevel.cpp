@@ -4,7 +4,6 @@
 
 namespace
 {
-    constexpr float PLAYER_SIZE = 40.0f;
     constexpr float FORWARD_SPEED = 200.0f;
     constexpr float GRAVITY = 900.0f;
     constexpr float JUMP_VELOCITY = -380.0f;
@@ -39,8 +38,10 @@ void FirstLevel::Init()
     screenHeight = GetScreenHeight();
 
     ground.Init(GroundStyle::Main);
-    playerY = ground.GetFloorY() - PLAYER_SIZE;
+    playerY = ground.GetFloorY() - metadata::PLAYER_SIZE;
     grounded = true;
+
+    nora.Init();
 
     const char* backgroundPath = ResolveAssetPath("assets/background/congobackground.jpg");
     Image backgroundImage = LoadImage(backgroundPath);
@@ -64,7 +65,7 @@ void FirstLevel::Update()
     playerVelY += GRAVITY * dt;
     playerY += playerVelY * dt;
 
-    const float groundLevel = ground.GetFloorY() - PLAYER_SIZE;
+    const float groundLevel = ground.GetFloorY() - metadata::PLAYER_SIZE;
     if (playerY >= groundLevel)
     {
         playerY = groundLevel;
@@ -88,10 +89,12 @@ void FirstLevel::Draw()
     BeginDrawing();
 
     DrawBackground();
+
+    // draw ground pieces
     ground.Draw(scrollOffset, screenWidth);
 
-    DrawRectangle(static_cast<int>(playerX), static_cast<int>(playerY), static_cast<int>(PLAYER_SIZE),
-                  static_cast<int>(PLAYER_SIZE), GRAY);
+    // drawing player
+    nora.Draw(static_cast<int>(playerX), static_cast<int>(playerY));
 
     EndDrawing();
 }
