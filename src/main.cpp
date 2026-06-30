@@ -1,16 +1,21 @@
+#include "levels/firstlevel.hpp"
+
 #include <raylib.h>
 
 int main()
 {
-    InitWindow(800, 600, "Hello Raylib");
+    InitWindow(800, 600, "Legend of Nora");
+    SetTargetFPS(60);
 
-    while (!WindowShouldClose())
+    FirstLevel level;
+    level.Init();
+
+    while (!WindowShouldClose() && level.IsRunning())
     {
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        DrawText("Hello, world!", 190, 200, 30, BLACK);
-        EndDrawing();
+        level.Update();
+        level.Draw();
     }
 
+    level.Cleanup();
     CloseWindow();
 }
