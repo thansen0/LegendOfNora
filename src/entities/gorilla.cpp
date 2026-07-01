@@ -52,7 +52,7 @@ void Gorilla::Enter(const float scrollOffset, const int screenWidth, const float
     LoadAssets();
 
     worldX = scrollOffset + static_cast<float>(screenWidth) + 80.0f;
-    y = floorY - static_cast<float>(metadata::GORILLA_SIZE) + 64;
+    y = floorY - static_cast<float>(metadata::GORILLA_DISPLAY_HEIGHT);
     active = assetsLoaded;
 }
 
@@ -80,7 +80,21 @@ void Gorilla::Draw(const float scrollOffset) const
     }
 
     const float screenX = GetScreenX(scrollOffset);
-    DrawTexture(texture, static_cast<int>(screenX), static_cast<int>(y), WHITE);
+    const float displayHeight = static_cast<float>(metadata::GORILLA_DISPLAY_HEIGHT);
+    const float aspectRatio =
+        static_cast<float>(texture.width) / static_cast<float>(texture.height);
+    const float displayWidth = displayHeight * aspectRatio;
+
+    // positive values shift him down
+    const int GORILLA_SITTING_OFFSET{24};
+
+    DrawTexturePro(
+        texture,
+        {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)},
+        {screenX, y+GORILLA_SITTING_OFFSET, displayWidth, displayHeight},
+        {0, 0},
+        0.0f,
+        WHITE);
 }
 
 void Gorilla::Cleanup()

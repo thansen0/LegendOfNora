@@ -5,8 +5,6 @@
 namespace
 {
     constexpr float FORWARD_SPEED = 200.0f;
-    constexpr float GRAVITY = 900.0f;
-    constexpr float JUMP_VELOCITY = -480.0f;
 }
 
 const char* FirstLevel::ResolveAssetPath(const char* relativePath)
@@ -78,7 +76,7 @@ void FirstLevel::Init()
 
     ground.Init(GroundStyle::Main);
     playerY = ground.GetFloorY() - metadata::PLAYER_SIZE;
-    grounded = true;
+    jumpState.Reset();
 
     nora.Init();
     books.Init(ground.GetFloorY());
@@ -103,7 +101,7 @@ void FirstLevel::Update()
 
     scrollOffset += FORWARD_SPEED * dt;
 
-    playerVelY += GRAVITY * dt;
+    playerVelY += metadata::GRAVITY * dt;
     playerY += playerVelY * dt;
 
     const float groundLevel = ground.GetFloorY() - metadata::PLAYER_SIZE;
@@ -111,18 +109,14 @@ void FirstLevel::Update()
     {
         playerY = groundLevel;
         playerVelY = 0.0f;
-        grounded = true;
+        jumpState.Land();
     }
     else
     {
-        grounded = false;
+        jumpState.grounded = false;
     }
 
-    if (IsKeyPressed(KEY_SPACE) && grounded)
-    {
-        playerVelY = JUMP_VELOCITY;
-        grounded = false;
-    }
+    jumpState.TryJump(playerVelY);
 
     if (!gorillaEncounter && !playerDead)
     {

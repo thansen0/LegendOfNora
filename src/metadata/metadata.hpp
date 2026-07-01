@@ -20,6 +20,7 @@ namespace metadata {
     const string_view NORA_SCENE_INOCENT{"assets/scenes/nora-background.jpg"};
     const string_view BOOK_GOD_JUDGEMENT{"assets/scenes/white-gorilla-stare.jpg"};
     const string_view NORA_SCENE_FATIGUED{"assets/scenes/nora-background-ominous.jpg"};
+    const string_view MOSUBA_GORILLA{"assets/scenes/mosuba-zoo.jpg"};
 
     const string_view TITLE_START_IMAGE{"assets/background/congobackground.jpg"};
     const string_view TITLE_DEATH_IMAGE{"assets/titlescreens/you-lost.jpg"};
@@ -30,8 +31,13 @@ namespace metadata {
 
     const int PLAYER_SIZE{40};
     const int NORA_DISPLAY_HEIGHT{96};
+
+    const float GRAVITY{900.0f};
+    const float JUMP_VELOCITY{-480.0f};
+    const float DOUBLE_JUMP_VELOCITY_MULTIPLIER{1.0f};
+    const int MAX_JUMPS{2};
     const int BOOK_SIZE{64};
-    const int GORILLA_SIZE{512};
+    const int GORILLA_DISPLAY_HEIGHT{260};
     const int ANGRY_CHIMP_DISPLAY_SIZE{88};
     const int ANGRY_CHIMP_GROUND_OFFSET{28};
     const int ANGRY_CHIMP_HITBOX_INSET{12};

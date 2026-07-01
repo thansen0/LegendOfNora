@@ -13,6 +13,7 @@ class TitleScreen
 {
 public:
     void Load(TitleScreenType type);
+    void SetBooksCollected(int count);
     void Unload();
     void Reset();
 
@@ -35,11 +36,13 @@ private:
     bool hovered = false;
     int screenWidth = 0;
     int screenHeight = 0;
+    int booksCollected = -1;
 
     void UpdateButtonBounds();
     void LoadImageBackground(const char* relativePath);
     void DrawBackground() const;
     void DrawHeadline() const;
+    void DrawDeathStats() const;
     void DrawButton() const;
     bool WasButtonActivated() const;
 

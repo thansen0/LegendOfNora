@@ -39,6 +39,8 @@ private:
     bool booksPlaced = false;
 
     [[nodiscard]] Rectangle GetBounds(float scrollOffset) const;
+    [[nodiscard]] bool HasHorizontalOverlap(const Rectangle& playerBounds, float scrollOffset) const;
+    [[nodiscard]] bool IsOnDeck(const Rectangle& playerBounds) const;
 };
 
 // Spawns and manages floating bridges ahead of the player.

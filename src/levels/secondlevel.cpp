@@ -3,11 +3,7 @@
 #include "assets/asset_paths.hpp"
 #include "metadata/metadata.hpp"
 
-namespace
-{
-    constexpr float GRAVITY = 900.0f;
-    constexpr float JUMP_VELOCITY = -480.0f;
-}
+
 
 void SecondLevel::DrawBackground()
 {
@@ -90,7 +86,7 @@ void SecondLevel::UpdatePlayerPhysics()
 {
     const float dt = GetFrameTime();
 
-    playerVelY += GRAVITY * dt;
+    playerVelY += metadata::GRAVITY * dt;
     playerY += playerVelY * dt;
 
     Rectangle playerBounds = GetPlayerBounds();
@@ -106,23 +102,22 @@ void SecondLevel::UpdatePlayerPhysics()
     {
         playerY = supportLevel;
         playerVelY = 0.0f;
-        grounded = true;
+        jumpState.Land();
     }
     else
     {
-        grounded = false;
+        jumpState.grounded = false;
     }
 
-    if (IsKeyPressed(KEY_SPACE) && grounded)
-    {
-        playerVelY = JUMP_VELOCITY;
-        grounded = false;
-    }
+    jumpState.TryJump(playerVelY);
 
-    playerBounds = GetPlayerBounds();
-    if (bridges.HitsSide(playerBounds, scrollOffset))
+    if (!jumpState.grounded)
     {
-        KillPlayer();
+        playerBounds = GetPlayerBounds();
+        if (bridges.HitsSide(playerBounds, scrollOffset))
+        {
+            KillPlayer();
+        }
     }
 }
 
@@ -172,7 +167,7 @@ void SecondLevel::Init(const int startingBooks)
 
     ground.Init(GroundStyle::Main);
     playerY = ground.GetFloorY() - metadata::PLAYER_SIZE;
-    grounded = true;
+    jumpState.Reset();
 
     nora.Init(startingBooks);
     books.Init(ground.GetFloorY());

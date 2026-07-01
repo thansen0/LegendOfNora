@@ -36,6 +36,7 @@ void TitleScreen::Load(const TitleScreenType type)
     screenHeight = GetScreenHeight();
     confirmed = false;
     hovered = false;
+    booksCollected = -1;
     UpdateButtonBounds();
 
     switch (type)
@@ -57,6 +58,11 @@ void TitleScreen::Load(const TitleScreenType type)
     }
 }
 
+void TitleScreen::SetBooksCollected(const int count)
+{
+    booksCollected = count;
+}
+
 void TitleScreen::Unload()
 {
     if (imageTexture.id != 0)
@@ -68,6 +74,7 @@ void TitleScreen::Unload()
     confirmed = false;
     hovered = false;
     buttonText = "";
+    booksCollected = -1;
 }
 
 void TitleScreen::Reset()
@@ -118,6 +125,23 @@ void TitleScreen::DrawHeadline() const
     DrawText(headline, headlineX, headlineY, TITLE_FONT_SIZE, RAYWHITE);
 }
 
+void TitleScreen::DrawDeathStats() const
+{
+    if (screenType != TitleScreenType::Death || booksCollected < 0)
+    {
+        return;
+    }
+
+    const char* statsText = TextFormat("You collected %d books", booksCollected);
+    constexpr int statsFontSize = 28;
+    const int statsWidth = MeasureText(statsText, statsFontSize);
+    const int statsX = (screenWidth - statsWidth) / 2;
+    const int statsY = screenHeight / 5 + TITLE_FONT_SIZE + 24;
+
+    DrawText(statsText, statsX + 2, statsY + 2, statsFontSize, {0, 0, 0, 180});
+    DrawText(statsText, statsX, statsY, statsFontSize, LIGHTGRAY);
+}
+
 void TitleScreen::DrawButton() const
 {
     const Color fillColor = hovered ? Color{70, 130, 180, 230} : Color{40, 40, 55, 220};
@@ -159,6 +183,7 @@ void TitleScreen::Draw()
 
     DrawBackground();
     DrawHeadline();
+    DrawDeathStats();
     DrawButton();
 
     EndDrawing();

@@ -1,4 +1,4 @@
-add_library(players STATIC nora.cpp)
+add_library(players STATIC nora.cpp player_jump.cpp)
 
 target_include_directories(players PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_link_libraries(players PUBLIC assets raylib)

@@ -18,10 +18,14 @@ namespace
         Advance,           // Level finished — continue to the next stage.
     };
 
-    bool RunTitleScreen(const TitleScreenType type)
+    bool RunTitleScreen(const TitleScreenType type, const int deathBooksCollected = -1)
     {
         TitleScreen screen;
         screen.Load(type);
+        if (type == TitleScreenType::Death && deathBooksCollected >= 0)
+        {
+            screen.SetBooksCollected(deathBooksCollected);
+        }
         screen.Reset();
 
         while (!screen.IsConfirmed() && !WindowShouldClose())
@@ -89,6 +93,18 @@ namespace
             {metadata::BOOK_GOD_JUDGEMENT, "I am your God, modeled after the greatest book ."},
             {metadata::NORA_SCENE_FATIGUED, "ok well if that's all may I go home now"},
             {metadata::BOOK_GOD_JUDGEMENT, "Absolutely not. You've come all this way, you must have a \nquestion for me."},
+            {metadata::NORA_SCENE_FATIGUED, "umm i guess the gorilla really wanted me to ask you the \nquestion to his answer"},
+            {metadata::BOOK_GOD_JUDGEMENT, "Oh you must mean the Question. The Ultimate Question."},
+            {metadata::NORA_SCENE_FATIGUED, "i guess, whatever,..."},
+            {metadata::BOOK_GOD_JUDGEMENT, "Your tenacity proves you are worth. I will tell you the question."},
+            {metadata::BOOK_GOD_JUDGEMENT, "The question, the Ultimate Question is as follows:"},
+            {metadata::MOSUBA_GORILLA, "You must pet Mosuba at the Asheboro Zoo"},
+            {metadata::NORA_SCENE_FATIGUED, "ohh... nooo, iii'm not..."},
+            {metadata::BOOK_GOD_JUDGEMENT, "YOU MUST!!! To know the question and not excersize its meaning \nis a crime in itself"},
+            {metadata::NORA_SCENE_FATIGUED, "ummm.."},
+            {metadata::BOOK_GOD_JUDGEMENT, "Do not listen to the zookeepers, it is safe. Mosuba gave me his word."},
+            {metadata::BOOK_GOD_JUDGEMENT, "You must attend the Asheboro Zoo and pet Mosuba exactly 42 times.\nThat is our ultimate purpose. The meaning of life."},
+
         };
 
         Scene scene;
@@ -144,7 +160,7 @@ namespace
     }
 
     // Runs the escalating second level.
-    LevelEnd RunSecondLevel(const int booksFromLevelOne)
+    LevelEnd RunSecondLevel(const int booksFromLevelOne, int& booksCollected)
     {
         SecondLevel level;
         level.Init(booksFromLevelOne);
@@ -157,6 +173,7 @@ namespace
 
         const bool playerDead = level.IsPlayerDead();
         const bool levelComplete = level.IsComplete();
+        booksCollected = level.GetBooksCollected();
         level.Cleanup();
 
         if (playerDead)
@@ -174,9 +191,9 @@ namespace
     }
 
     // Shows the death screen, then waits for the player to reach the start menu.
-    void HandleDeath()
+    void HandleDeath(const int booksCollected)
     {
-        RunTitleScreen(TitleScreenType::Death);
+        RunTitleScreen(TitleScreenType::Death, booksCollected);
     }
 }
 
@@ -200,18 +217,18 @@ int main()
         }
         if (firstEnd == LevelEnd::ReturnToStartMenu)
         {
-            HandleDeath();
+            HandleDeath(booksCollected);
             continue; // Back to the start menu — do not run level 2.
         }
 
-        const LevelEnd secondEnd = RunSecondLevel(booksCollected);
+        const LevelEnd secondEnd = RunSecondLevel(booksCollected, booksCollected);
         if (secondEnd == LevelEnd::Quit)
         {
             break;
         }
         if (secondEnd == LevelEnd::ReturnToStartMenu)
         {
-            HandleDeath();
+            HandleDeath(booksCollected);
             continue; // Back to the start menu.
         }
 

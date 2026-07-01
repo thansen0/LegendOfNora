@@ -8,6 +8,7 @@
 #include "entities/angry_chimp_spawner.hpp"
 #include "entities/sliding_chimp_spawner.hpp"
 #include "player/nora.hpp"
+#include "player/player_jump.hpp"
 
 // Speed-ramping book hunt: floating bridges, sliding chimps, and a final book flood.
 class SecondLevel
@@ -32,7 +33,7 @@ private:
     float playerX = 120.0f;
     float playerY = 0.0f;
     float playerVelY = 0.0f;
-    bool grounded = false;
+    PlayerJumpState jumpState{};
 
     float scrollOffset = 0.0f;
     float speedMultiplier = 1.0f;

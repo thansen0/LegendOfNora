@@ -7,6 +7,7 @@
 #include "entities/angry_chimp_spawner.hpp"
 #include "entities/gorilla.hpp"
 #include "player/nora.hpp"
+#include "player/player_jump.hpp"
 #include "metadata/metadata.hpp"
 
 class FirstLevel
@@ -31,7 +32,7 @@ private:
     float playerX = 120.0f;
     float playerY = 0.0f;
     float playerVelY = 0.0f;
-    bool grounded = false;
+    PlayerJumpState jumpState{};
 
     float scrollOffset = 0.0f;
     float screenFade = 0.0f;

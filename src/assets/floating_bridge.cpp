@@ -66,6 +66,20 @@ void FloatingBridge::Draw(const float scrollOffset, const SpriteSheet& sheet,
     }
 }
 
+bool FloatingBridge::HasHorizontalOverlap(const Rectangle& playerBounds,
+                                          const float scrollOffset) const
+{
+    const Rectangle bridgeBounds = GetBounds(scrollOffset);
+    return playerBounds.x < bridgeBounds.x + bridgeBounds.width &&
+           playerBounds.x + playerBounds.width > bridgeBounds.x;
+}
+
+bool FloatingBridge::IsOnDeck(const Rectangle& playerBounds) const
+{
+    const float playerBottom = playerBounds.y + playerBounds.height;
+    return playerBottom >= topY - landingTolerance && playerBottom <= topY + landingTolerance;
+}
+
 bool FloatingBridge::HitsSide(const Rectangle& playerBounds, const float scrollOffset) const
 {
     if (!active)
@@ -79,8 +93,7 @@ bool FloatingBridge::HitsSide(const Rectangle& playerBounds, const float scrollO
         return false;
     }
 
-    const float playerBottom = playerBounds.y + playerBounds.height;
-    if (playerBottom >= topY - landingTolerance && playerBottom <= topY + landingTolerance)
+    if (IsOnDeck(playerBounds))
     {
         return false;
     }
@@ -96,14 +109,15 @@ bool FloatingBridge::TryLandPlayer(Rectangle& playerBounds, const float playerVe
         return false;
     }
 
-    const Rectangle bridgeBounds = GetBounds(scrollOffset);
-    if (!CheckCollisionRecs(playerBounds, bridgeBounds))
+    if (!HasHorizontalOverlap(playerBounds, scrollOffset))
     {
         return false;
     }
 
     const float playerBottom = playerBounds.y + playerBounds.height;
-    if (playerBottom < topY - landingTolerance || playerBottom > topY + landingTolerance)
+
+    // Accept any downward entry into the top tile so fast falls still snap to the deck.
+    if (playerBottom < topY || playerBottom > topY + static_cast<float>(tileSize))
     {
         return false;
     }
