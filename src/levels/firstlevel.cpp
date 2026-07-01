@@ -52,7 +52,19 @@ void FirstLevel::BeginGorillaEncounter()
 
     gorillaEncounter = true;
     books.Deactivate();
+    chimps.Deactivate();
     gorilla.Enter(scrollOffset, screenWidth, ground.GetFloorY());
+}
+
+void FirstLevel::KillPlayer()
+{
+    if (playerDead)
+    {
+        return;
+    }
+
+    playerDead = true;
+    running = false;
 }
 
 void FirstLevel::Init()
@@ -60,6 +72,8 @@ void FirstLevel::Init()
     screenWidth = GetScreenWidth();
     screenHeight = GetScreenHeight();
     gorillaEncounter = false;
+    levelComplete = false;
+    playerDead = false;
     screenFade = 0.0f;
 
     ground.Init(GroundStyle::Main);
@@ -68,6 +82,7 @@ void FirstLevel::Init()
 
     nora.Init();
     books.Init(ground.GetFloorY());
+    chimps.Init(ground.GetFloorY());
 
     const char* backgroundPath = ResolveAssetPath("assets/background/congobackground.jpg");
     Image backgroundImage = LoadImage(backgroundPath);
@@ -109,6 +124,16 @@ void FirstLevel::Update()
         grounded = false;
     }
 
+    if (!gorillaEncounter && !playerDead)
+    {
+        chimps.Update(scrollOffset, screenWidth);
+
+        if (chimps.CheckCollisions(playerX, playerY, static_cast<float>(metadata::PLAYER_SIZE), scrollOffset))
+        {
+            KillPlayer();
+        }
+    }
+
     if (books.IsActive())
     {
         books.Update(scrollOffset, screenWidth);
@@ -126,6 +151,7 @@ void FirstLevel::Update()
 
         if (screenFade >= 1.0f)
         {
+            levelComplete = true;
             running = false;
         }
     }
@@ -139,6 +165,7 @@ void FirstLevel::Draw()
 
     ground.Draw(scrollOffset, screenWidth);
     books.Draw(scrollOffset);
+    chimps.Draw(scrollOffset);
     gorilla.Draw(scrollOffset);
 
     nora.Draw(static_cast<int>(playerX), static_cast<int>(playerY));
@@ -152,6 +179,7 @@ void FirstLevel::Draw()
 void FirstLevel::Cleanup()
 {
     books.Cleanup();
+    chimps.Cleanup();
     gorilla.Cleanup();
     ground.Cleanup();
     nora.Cleanup();

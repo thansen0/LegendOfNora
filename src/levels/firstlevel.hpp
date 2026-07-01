@@ -4,6 +4,7 @@
 
 #include "assets/ground.hpp"
 #include "book/book_spawner.hpp"
+#include "entities/angry_chimp_spawner.hpp"
 #include "entities/gorilla.hpp"
 #include "player/nora.hpp"
 #include "metadata/metadata.hpp"
@@ -17,9 +18,13 @@ public:
     void Cleanup();
 
     [[nodiscard]] bool IsRunning() const { return running; }
+    [[nodiscard]] bool IsComplete() const { return levelComplete; }
+    [[nodiscard]] bool IsPlayerDead() const { return playerDead; }
 
 private:
     bool running = true;
+    bool levelComplete = false;
+    bool playerDead = false;
     bool gorillaEncounter = false;
 
     float playerX = 120.0f;
@@ -37,11 +42,13 @@ private:
     Ground ground{};
     Nora nora{};
     BookSpawner books{};
+    AngryChimpSpawner chimps{};
     Gorilla gorilla{};
 
     void DrawBackground();
     void DrawScreenFade();
     void BeginGorillaEncounter();
+    void KillPlayer();
 
     static const char* ResolveAssetPath(const char* relativePath);
 };

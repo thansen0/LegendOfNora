@@ -1,4 +1,8 @@
-add_library(entities STATIC gorilla.cpp)
+add_library(entities STATIC
+    angry_chimp.cpp
+    angry_chimp_spawner.cpp
+    gorilla.cpp
+)
 
 target_include_directories(entities PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_link_libraries(entities PUBLIC assets raylib)
