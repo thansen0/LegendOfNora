@@ -123,6 +123,11 @@ void FirstLevel::Update()
     if (gorillaEncounter)
     {
         screenFade = gorilla.GetFadeAlpha(scrollOffset, playerX);
+
+        if (screenFade >= 1.0f)
+        {
+            running = false;
+        }
     }
 }
 

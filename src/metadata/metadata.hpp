@@ -14,6 +14,9 @@ namespace metadata {
     const string_view BOOK_TEXTURE{"assets/items/book_64.png"};
     const string_view GORILLA_TEXTURE{"assets/entities/gorilla_512.png"};
 
+    const string_view GORILLA_SCENE_YELL{"assets/scenes/gorilla-background.jpg"};
+    const string_view NORA_SCENE_INOCENT{"assets/scenes/nora-background.jpg"};
+
     const int PLAYER_SIZE{40};
     const int BOOK_SIZE{64};
     const int GORILLA_SIZE{512};
