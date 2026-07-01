@@ -54,7 +54,7 @@ namespace
             {metadata::NORA_SCENE_INOCENT, " ... "},
             {metadata::GORILLA_SCENE_YELL, "I can see you're deeply moved."},
             {metadata::GORILLA_SCENE_YELL,
-             "Deep in the forest lives a eternal being, who is said to be \nomniscient and omnipotent. You've "
+             "Deep in the forest lives an eternal being, who is said to be \nomniscient and omnipotent. You've "
              "already collected " +
                  to_string(metadata::BOOKS_TO_COMPLETE_LVL1) +
                  " books, \ncollect " + to_string(metadata::BOOKS_TO_COMPLETE_LVL2) +
@@ -102,7 +102,7 @@ namespace
             {metadata::BOOK_GOD_JUDGEMENT, "The question, the Ultimate Question is as follows:"},
             {metadata::MOSUBA_GORILLA, "You must pet Mosuba at the Asheboro Zoo"},
             {metadata::NORA_SCENE_FATIGUED, "ohh... nooo, iii'm not..."},
-            {metadata::BOOK_GOD_JUDGEMENT, "YOU MUST!!! To know the question and not excersize its meaning \nis a crime in itself"},
+            {metadata::BOOK_GOD_JUDGEMENT, "YOU MUST!!! To know the question and not exercise its meaning \nis a crime in itself"},
             {metadata::NORA_SCENE_FATIGUED, "ummm.."},
             {metadata::BOOK_GOD_JUDGEMENT, "Do not listen to the zookeepers, they tell lies. Mosuba gave me his word."},
             {metadata::BOOK_GOD_JUDGEMENT, "You must attend the Asheboro Zoo and pet Mosuba exactly 42 times.\nThat is our ultimate purpose. The meaning of life."},
