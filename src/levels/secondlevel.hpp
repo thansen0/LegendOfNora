@@ -29,6 +29,8 @@ private:
     bool levelComplete = false;
     bool playerDead = false;
     bool obstaclePhase = true;
+    bool victoryRide = false;
+    float victoryRideTimer = 0.0f;
 
     float playerX = 120.0f;
     float playerY = 0.0f;
@@ -56,6 +58,8 @@ private:
     void PopulateBridgeBooks();
     void KillPlayer();
     void CheckLevelComplete();
+    void BeginVictoryRide();
+    void UpdateVictoryRide(float dt);
 
     [[nodiscard]] float GetForwardSpeed() const;
     [[nodiscard]] Rectangle GetPlayerBounds() const;

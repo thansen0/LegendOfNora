@@ -145,9 +145,63 @@ void SecondLevel::UpdateObstacles(const float dt)
     }
 }
 
+void SecondLevel::BeginVictoryRide()
+{
+    if (victoryRide)
+    {
+        return;
+    }
+
+    victoryRide = true;
+    victoryRideTimer = 0.0f;
+
+    books.Deactivate();
+    groundChimps.Deactivate();
+    slidingChimps.Deactivate();
+
+    for (int i = 0; i < bridges.GetBridgePoolSize(); ++i)
+    {
+        bridges.GetBridge(i).Deactivate();
+    }
+}
+
 void SecondLevel::CheckLevelComplete()
 {
+    if (victoryRide || levelComplete)
+    {
+        return;
+    }
+
     if (nora.GetBooksCollected() >= metadata::BOOKS_TO_COMPLETE_LVL2)
+    {
+        BeginVictoryRide();
+    }
+}
+
+void SecondLevel::UpdateVictoryRide(const float dt)
+{
+    UpdateSpeed();
+    scrollOffset += GetForwardSpeed() * dt;
+    victoryRideTimer += dt;
+
+    playerVelY += metadata::GRAVITY * dt;
+    playerY += playerVelY * dt;
+
+    const float groundLevel = ground.GetFloorY() - static_cast<float>(metadata::PLAYER_SIZE);
+    if (playerY >= groundLevel)
+    {
+        playerY = groundLevel;
+        playerVelY = 0.0f;
+        jumpState.Land();
+    }
+    else
+    {
+        jumpState.grounded = false;
+    }
+
+    jumpState.TryJump(playerVelY);
+
+    if (victoryRideTimer >= metadata::LEVEL2_VICTORY_RIDE_DURATION)
     {
         levelComplete = true;
         running = false;
@@ -162,6 +216,8 @@ void SecondLevel::Init(const int startingBooks)
     levelComplete = false;
     playerDead = false;
     obstaclePhase = true;
+    victoryRide = false;
+    victoryRideTimer = 0.0f;
     speedMultiplier = 1.0f;
     scrollOffset = 0.0f;
 
@@ -198,6 +254,12 @@ void SecondLevel::Update()
 
     const float dt = GetFrameTime();
 
+    if (victoryRide)
+    {
+        UpdateVictoryRide(dt);
+        return;
+    }
+
     UpdateSpeed();
     scrollOffset += GetForwardSpeed() * dt;
 
@@ -220,16 +282,27 @@ void SecondLevel::Draw()
     DrawBackground();
 
     ground.Draw(scrollOffset, screenWidth);
-    bridges.Draw(scrollOffset);
-    books.Draw(scrollOffset);
-    groundChimps.Draw(scrollOffset);
-    slidingChimps.Draw(scrollOffset);
+
+    if (!victoryRide)
+    {
+        bridges.Draw(scrollOffset);
+        books.Draw(scrollOffset);
+        groundChimps.Draw(scrollOffset);
+        slidingChimps.Draw(scrollOffset);
+    }
 
     nora.Draw(static_cast<int>(playerX), static_cast<int>(playerY));
 
-    DrawText(TextFormat("Books: %d / %d", nora.GetBooksCollected(), metadata::BOOKS_TO_COMPLETE_LVL2),
-             10, 10, 20, WHITE);
-    DrawText(TextFormat("Speed: %.1fx", speedMultiplier), 10, 36, 18, LIGHTGRAY);
+    if (victoryRide)
+    {
+        DrawText("Victory!", 10, 10, 20, GOLD);
+    }
+    else
+    {
+        DrawText(TextFormat("Books: %d / %d", nora.GetBooksCollected(), metadata::BOOKS_TO_COMPLETE_LVL2),
+                 10, 10, 20, WHITE);
+        DrawText(TextFormat("Speed: %.1fx", speedMultiplier), 10, 36, 18, LIGHTGRAY);
+    }
 
     EndDrawing();
 }

@@ -60,9 +60,7 @@ void BookSpawner::SpawnBooksOnPlatform(const float worldStartX, const int tileCo
 
 void BookSpawner::SpawnFloodBooks(const float scrollOffset, const int screenWidth)
 {
-    constexpr int booksPerWave = 6;
-
-    for (int i = 0; i < booksPerWave; ++i)
+    for (int i = 0; i < metadata::LEVEL2_FLOOD_BOOKS_PER_WAVE; ++i)
     {
         const float worldX = scrollOffset + static_cast<float>(GetRandomValue(0, screenWidth));
         const float y = static_cast<float>(GetRandomValue(80, static_cast<int>(floorY - metadata::BOOK_SIZE)));

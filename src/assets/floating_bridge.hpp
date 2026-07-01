@@ -61,7 +61,7 @@ public:
 private:
     static constexpr int POOL_SIZE = 10;
     static constexpr int MIN_BRIDGE_LENGTH = 5;
-    static constexpr int MAX_BRIDGE_LENGTH = 10;
+    static constexpr int MAX_BRIDGE_LENGTH = 12;
     static constexpr float MIN_SPAWN_GAP = 700.0f;
     static constexpr float MAX_SPAWN_GAP = 1200.0f;
 

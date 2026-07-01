@@ -14,7 +14,8 @@ namespace
     enum class LevelEnd
     {
         Quit,              // Window closed — exit the game loop.
-        ReturnToStartMenu, // Player died — show death screen, then the start menu.
+        ReturnToStartMenu, // Level 1 death — show death screen, then the start menu.
+        RetrySecondLevel,  // Level 2 death — show death screen, then restart level 2.
         Advance,           // Level finished — continue to the next stage.
     };
 
@@ -93,17 +94,20 @@ namespace
             {metadata::BOOK_GOD_JUDGEMENT, "I am your God, modeled after the greatest book ."},
             {metadata::NORA_SCENE_FATIGUED, "ok well if that's all may I go home now"},
             {metadata::BOOK_GOD_JUDGEMENT, "Absolutely not. You've come all this way, you must have a \nquestion for me."},
-            {metadata::NORA_SCENE_FATIGUED, "umm i guess the gorilla really wanted me to ask you the \nquestion to his answer"},
-            {metadata::BOOK_GOD_JUDGEMENT, "Oh you must mean the Question. The Ultimate Question."},
+            {metadata::NORA_SCENE_FATIGUED, "not really.."},
+            {metadata::NORA_SCENE_FATIGUED, "i guess the gorilla really wanted me to ask you the \n\"question\" to his ultimate answer?"},
+            {metadata::BOOK_GOD_JUDGEMENT, "Oh you want the Question. The Ultimate Question."},
             {metadata::NORA_SCENE_FATIGUED, "i guess, whatever,..."},
-            {metadata::BOOK_GOD_JUDGEMENT, "Your tenacity proves you are worth. I will tell you the question."},
+            {metadata::BOOK_GOD_JUDGEMENT, "Your tenacity to come here demonstrates worth. I will tell you the question."},
             {metadata::BOOK_GOD_JUDGEMENT, "The question, the Ultimate Question is as follows:"},
             {metadata::MOSUBA_GORILLA, "You must pet Mosuba at the Asheboro Zoo"},
             {metadata::NORA_SCENE_FATIGUED, "ohh... nooo, iii'm not..."},
             {metadata::BOOK_GOD_JUDGEMENT, "YOU MUST!!! To know the question and not excersize its meaning \nis a crime in itself"},
             {metadata::NORA_SCENE_FATIGUED, "ummm.."},
-            {metadata::BOOK_GOD_JUDGEMENT, "Do not listen to the zookeepers, it is safe. Mosuba gave me his word."},
+            {metadata::BOOK_GOD_JUDGEMENT, "Do not listen to the zookeepers, they tell lies. Mosuba gave me his word."},
             {metadata::BOOK_GOD_JUDGEMENT, "You must attend the Asheboro Zoo and pet Mosuba exactly 42 times.\nThat is our ultimate purpose. The meaning of life."},
+            {metadata::NORA_SCENE_FATIGUED, "hmm I guess you're right."},
+            {metadata::NORA_SCENE_FATIGUED, "I, Game Player, promise to pet Mosuba next time I see him."},
 
         };
 
@@ -178,7 +182,7 @@ namespace
 
         if (playerDead)
         {
-            return LevelEnd::ReturnToStartMenu;
+            return LevelEnd::RetrySecondLevel;
         }
 
         if (!levelComplete)
@@ -186,11 +190,10 @@ namespace
             return LevelEnd::Quit;
         }
 
-        RunTitleScreen(TitleScreenType::Win);
         return LevelEnd::Advance;
     }
 
-    // Shows the death screen, then waits for the player to reach the start menu.
+    // Shows the death screen before returning to the start menu or retrying level 2.
     void HandleDeath(const int booksCollected)
     {
         RunTitleScreen(TitleScreenType::Death, booksCollected);
@@ -221,18 +224,31 @@ int main()
             continue; // Back to the start menu — do not run level 2.
         }
 
-        const LevelEnd secondEnd = RunSecondLevel(booksCollected, booksCollected);
-        if (secondEnd == LevelEnd::Quit)
+        const int booksFromLevelOne = booksCollected;
+        LevelEnd secondEnd = LevelEnd::RetrySecondLevel;
+
+        while (!WindowShouldClose())
+        {
+            secondEnd = RunSecondLevel(booksFromLevelOne, booksCollected);
+            if (secondEnd == LevelEnd::Quit)
+            {
+                break;
+            }
+            if (secondEnd == LevelEnd::RetrySecondLevel)
+            {
+                HandleDeath(booksCollected);
+                continue;
+            }
+            break;
+        }
+
+        if (secondEnd == LevelEnd::Quit || WindowShouldClose())
         {
             break;
         }
-        if (secondEnd == LevelEnd::ReturnToStartMenu)
-        {
-            HandleDeath(booksCollected);
-            continue; // Back to the start menu.
-        }
 
         RunFinalscenes();
+        RunTitleScreen(TitleScreenType::Win);
     }
 
     CloseWindow();

@@ -48,9 +48,11 @@ namespace metadata {
     const int FLOATING_BRIDGE_TILE_COLUMN{7};
 
     const float LEVEL2_BASE_SPEED{200.0f};
-    const float LEVEL2_SPEED_RAMP_SCALE{10000.0f};
-    const float LEVEL2_OBSTACLE_CUTOFF_MULTIPLIER{4.0f};
+    const float LEVEL2_SPEED_RAMP_SCALE{6500.0f};           // lower = speed ramps up faster
+    const float LEVEL2_OBSTACLE_CUTOFF_MULTIPLIER{3.25f};   // lower = book flood starts sooner
+    const int LEVEL2_FLOOD_BOOKS_PER_WAVE{10};
+    const float LEVEL2_VICTORY_RIDE_DURATION{3.5f};
 
-    const int BOOKS_TO_COMPLETE_LVL1{5}; // reduced from {42}; for faster testing
-    const int BOOKS_TO_COMPLETE_LVL2{534};
+    const int BOOKS_TO_COMPLETE_LVL1{42}; // reduced from {42}; for faster testing
+    const int BOOKS_TO_COMPLETE_LVL2{536}; //{534};
 }
