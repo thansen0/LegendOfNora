@@ -1,4 +1,7 @@
-add_library(levels STATIC firstlevel.cpp)
+add_library(levels STATIC
+    firstlevel.cpp
+    secondlevel.cpp
+)
 
 target_include_directories(levels PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_link_libraries(levels PUBLIC assets book entities players raylib)

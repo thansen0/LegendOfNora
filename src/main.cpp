@@ -1,4 +1,5 @@
 #include "levels/firstlevel.hpp"
+#include "levels/secondlevel.hpp"
 #include "metadata/metadata.hpp"
 #include "scenes/scene.hpp"
 #include "scenes/scene_data.hpp"
@@ -10,6 +11,13 @@
 
 namespace
 {
+    enum class LevelEnd
+    {
+        Quit,              // Window closed — exit the game loop.
+        ReturnToStartMenu, // Player died — show death screen, then the start menu.
+        Advance,           // Level finished — continue to the next stage.
+    };
+
     bool RunTitleScreen(const TitleScreenType type)
     {
         TitleScreen screen;
@@ -73,10 +81,73 @@ namespace
         }
     }
 
-    bool RunFirstLevel()
+    void RunFinalscenes()
+    {
+        const std::vector<SceneData> allScenes = {
+            {metadata::BOOK_GOD_JUDGEMENT, " ...  "},
+            {metadata::NORA_SCENE_FATIGUED, "sooo.. who are you?"},
+            {metadata::BOOK_GOD_JUDGEMENT, "I am your God, modeled after the greatest book ."},
+            {metadata::NORA_SCENE_FATIGUED, "ok well if that's all may I go home now"},
+            {metadata::BOOK_GOD_JUDGEMENT, "Absolutely not. You've come all this way, you must have a \nquestion for me."},
+        };
+
+        Scene scene;
+        for (const SceneData& sceneData : allScenes)
+        {
+            scene.Load(sceneData);
+            scene.Reset();
+
+            while (!scene.IsComplete() && !WindowShouldClose())
+            {
+                scene.Update();
+                scene.Draw();
+            }
+
+            scene.Unload();
+
+            if (WindowShouldClose())
+            {
+                break;
+            }
+        }
+    }
+
+    // Runs level one and, on success, the post-level cutscene.
+    LevelEnd RunFirstLevel(int& booksCollected)
     {
         FirstLevel level;
         level.Init();
+
+        while (!WindowShouldClose() && level.IsRunning())
+        {
+            level.Update();
+            level.Draw();
+        }
+
+        const bool playerDead = level.IsPlayerDead();
+        const bool levelComplete = level.IsComplete();
+        booksCollected = level.GetBooksCollected();
+        level.Cleanup();
+
+        if (playerDead)
+        {
+            return LevelEnd::ReturnToStartMenu;
+        }
+
+        if (!levelComplete)
+        {
+            return LevelEnd::Quit;
+        }
+
+        RunCutscenes();
+        return LevelEnd::Advance;
+    }
+
+    // Runs the escalating second level.
+    LevelEnd RunSecondLevel(const int booksFromLevelOne)
+    {
+        SecondLevel level;
+        level.Init(booksFromLevelOne);
 
         while (!WindowShouldClose() && level.IsRunning())
         {
@@ -90,18 +161,22 @@ namespace
 
         if (playerDead)
         {
-            RunTitleScreen(TitleScreenType::Death);
-            return true;
+            return LevelEnd::ReturnToStartMenu;
         }
 
         if (!levelComplete)
         {
-            return false;
+            return LevelEnd::Quit;
         }
 
-        RunCutscenes();
         RunTitleScreen(TitleScreenType::Win);
-        return true;
+        return LevelEnd::Advance;
+    }
+
+    // Shows the death screen, then waits for the player to reach the start menu.
+    void HandleDeath()
+    {
+        RunTitleScreen(TitleScreenType::Death);
     }
 }
 
@@ -117,10 +192,30 @@ int main()
             break;
         }
 
-        if (!RunFirstLevel())
+        int booksCollected = 0;
+        const LevelEnd firstEnd = RunFirstLevel(booksCollected);
+        if (firstEnd == LevelEnd::Quit)
         {
             break;
         }
+        if (firstEnd == LevelEnd::ReturnToStartMenu)
+        {
+            HandleDeath();
+            continue; // Back to the start menu — do not run level 2.
+        }
+
+        const LevelEnd secondEnd = RunSecondLevel(booksCollected);
+        if (secondEnd == LevelEnd::Quit)
+        {
+            break;
+        }
+        if (secondEnd == LevelEnd::ReturnToStartMenu)
+        {
+            HandleDeath();
+            continue; // Back to the start menu.
+        }
+
+        RunFinalscenes();
     }
 
     CloseWindow();

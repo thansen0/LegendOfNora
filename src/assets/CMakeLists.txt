@@ -1,5 +1,6 @@
 add_library(assets STATIC
     asset_paths.cpp
+    floating_bridge.cpp
     spritesheet.cpp
     ground.cpp
 )

@@ -2,17 +2,18 @@
 
 #include <raylib.h>
 
+#include "assets/floating_bridge.hpp"
 #include "assets/ground.hpp"
 #include "book/book_spawner.hpp"
 #include "entities/angry_chimp_spawner.hpp"
-#include "entities/gorilla.hpp"
+#include "entities/sliding_chimp_spawner.hpp"
 #include "player/nora.hpp"
-#include "metadata/metadata.hpp"
 
-class FirstLevel
+// Speed-ramping book hunt: floating bridges, sliding chimps, and a final book flood.
+class SecondLevel
 {
 public:
-    void Init();
+    void Init(int startingBooks = 0);
     void Update();
     void Draw();
     void Cleanup();
@@ -26,7 +27,7 @@ private:
     bool running = true;
     bool levelComplete = false;
     bool playerDead = false;
-    bool gorillaEncounter = false;
+    bool obstaclePhase = true;
 
     float playerX = 120.0f;
     float playerY = 0.0f;
@@ -34,7 +35,7 @@ private:
     bool grounded = false;
 
     float scrollOffset = 0.0f;
-    float screenFade = 0.0f;
+    float speedMultiplier = 1.0f;
 
     int screenWidth = 800;
     int screenHeight = 600;
@@ -43,13 +44,18 @@ private:
     Ground ground{};
     Nora nora{};
     BookSpawner books{};
-    AngryChimpSpawner chimps{};
-    Gorilla gorilla{};
+    FloatingBridgeManager bridges{};
+    AngryChimpSpawner groundChimps{};
+    SlidingChimpSpawner slidingChimps{};
 
     void DrawBackground();
-    void DrawScreenFade();
-    void BeginGorillaEncounter();
+    void UpdateSpeed();
+    void UpdatePlayerPhysics();
+    void UpdateObstacles(float dt);
+    void PopulateBridgeBooks();
     void KillPlayer();
+    void CheckLevelComplete();
 
-    static const char* ResolveAssetPath(const char* relativePath);
+    [[nodiscard]] float GetForwardSpeed() const;
+    [[nodiscard]] Rectangle GetPlayerBounds() const;
 };
