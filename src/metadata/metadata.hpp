@@ -20,12 +20,14 @@ namespace metadata {
     const string_view NORA_SCENE_INOCENT{"assets/scenes/nora-background.jpg"};
     const string_view BOOK_GOD_JUDGEMENT{"assets/scenes/white-gorilla-stare.jpg"};
     const string_view NORA_SCENE_FATIGUED{"assets/scenes/nora-background-ominous.jpg"};
+    const string_view NORA_SCENE_THINKING{"assets/scenes/nora-background-ominous-thinking.jpg"};
+    const string_view NORA_SCENE_AGREEING{"assets/scenes/nora-background-ominous-agree.jpg"};
     const string_view MOSUBA_GORILLA{"assets/scenes/mosuba-zoo.jpg"};
 
     const string_view TITLE_START_IMAGE{"assets/background/congobackground.jpg"};
     const string_view TITLE_DEATH_IMAGE{"assets/titlescreens/you-lost.jpg"};
     const string_view TITLE_WIN_IMAGE{"assets/titlescreens/you-win.jpg"};
-    const string_view GAME_TITLE{"The Legent of Nora"};
+    const string_view GAME_TITLE{"The Legend of Nora"};
     const string_view TITLE_DEATH_MESSAGE{"Sorry you died"};
     const string_view TITLE_WIN_MESSAGE{"Congratulations, you won!"};
 
@@ -49,7 +51,7 @@ namespace metadata {
 
     const float LEVEL2_BASE_SPEED{200.0f};
     const float LEVEL2_SPEED_RAMP_SCALE{6500.0f};           // lower = speed ramps up faster
-    const float LEVEL2_OBSTACLE_CUTOFF_MULTIPLIER{3.25f};   // lower = book flood starts sooner
+    const float LEVEL2_OBSTACLE_CUTOFF_MULTIPLIER{3.55f};   // lower = book flood starts sooner
     const int LEVEL2_FLOOD_BOOKS_PER_WAVE{10};
     const float LEVEL2_VICTORY_RIDE_DURATION{3.5f};
 

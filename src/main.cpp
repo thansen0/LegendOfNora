@@ -54,7 +54,7 @@ namespace
             {metadata::NORA_SCENE_INOCENT, " ... "},
             {metadata::GORILLA_SCENE_YELL, "I can see you're deeply moved."},
             {metadata::GORILLA_SCENE_YELL,
-             "Deep in the forest lives an eternal being, who is said to be \nomniscient and omnipotent. You've "
+             "Buried in the jungle lives an eternal being, who is said to be \nomniscient and omnipotent. You've "
              "already collected " +
                  to_string(metadata::BOOKS_TO_COMPLETE_LVL1) +
                  " books, \ncollect " + to_string(metadata::BOOKS_TO_COMPLETE_LVL2) +
@@ -89,25 +89,26 @@ namespace
     void RunFinalscenes()
     {
         const std::vector<SceneData> allScenes = {
-            {metadata::BOOK_GOD_JUDGEMENT, " ...  "},
+            {metadata::BOOK_GOD_JUDGEMENT, "****  "},
             {metadata::NORA_SCENE_FATIGUED, "sooo.. who are you?"},
-            {metadata::BOOK_GOD_JUDGEMENT, "I am your God, modeled after the greatest book ."},
-            {metadata::NORA_SCENE_FATIGUED, "ok well if that's all may I go home now"},
+            {metadata::BOOK_GOD_JUDGEMENT, "I am Macombo II. I have lived in the Congo jungle since it \nwas called Zaire, and I have understanding beyond \nwhat you could ever concieve."},
+            {metadata::NORA_SCENE_FATIGUED, "ok well if that's all may I go home now?"},
             {metadata::BOOK_GOD_JUDGEMENT, "Absolutely not. You've come all this way, you must have a \nquestion for me."},
             {metadata::NORA_SCENE_FATIGUED, "not really.."},
-            {metadata::NORA_SCENE_FATIGUED, "i guess the gorilla really wanted me to ask you the \n\"question\" to his ultimate answer?"},
+            {metadata::BOOK_GOD_JUDGEMENT, "**Intense judgement**"},
+            {metadata::NORA_SCENE_FATIGUED, "i guess the gorilla really wanted me to ask you for the \n\"question\" to his ultimate answer?"},
             {metadata::BOOK_GOD_JUDGEMENT, "Oh you want the Question. The Ultimate Question."},
-            {metadata::NORA_SCENE_FATIGUED, "i guess, whatever,..."},
-            {metadata::BOOK_GOD_JUDGEMENT, "Your tenacity to come here demonstrates worth. I will tell you the question."},
+            {metadata::NORA_SCENE_FATIGUED, "i suppose, whatever,..."},
+            {metadata::BOOK_GOD_JUDGEMENT, "Your tenacity to come here demonstrates your worth. I will \ntell you the question."},
             {metadata::BOOK_GOD_JUDGEMENT, "The question, the Ultimate Question is as follows:"},
             {metadata::MOSUBA_GORILLA, "You must pet Mosuba at the Asheboro Zoo"},
             {metadata::NORA_SCENE_FATIGUED, "ohh... nooo, iii'm not..."},
             {metadata::BOOK_GOD_JUDGEMENT, "YOU MUST!!! To know the question and not exercise its meaning \nis a crime in itself"},
             {metadata::NORA_SCENE_FATIGUED, "ummm.."},
-            {metadata::BOOK_GOD_JUDGEMENT, "Do not listen to the zookeepers, they tell lies. Mosuba gave me his word."},
+            {metadata::BOOK_GOD_JUDGEMENT, "Do not listen to the zookeepers, they tell lies. Mosuba gave me \nhis word."},
             {metadata::BOOK_GOD_JUDGEMENT, "You must attend the Asheboro Zoo and pet Mosuba exactly 42 times.\nThat is our ultimate purpose. The meaning of life."},
-            {metadata::NORA_SCENE_FATIGUED, "hmm I guess you're right."},
-            {metadata::NORA_SCENE_FATIGUED, "I, Game Player, promise to pet Mosuba next time I see him."},
+            {metadata::NORA_SCENE_THINKING, "hmm I guess you're right."},
+            {metadata::NORA_SCENE_AGREEING, "I, Game Player, promise to pet Mosuba next time I see him.\n\nPress (SPACE) to contractually agree."},
 
         };
 
