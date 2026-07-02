@@ -1,0 +1,63 @@
+name: Build macOS (Apple Silicon)
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos-arm64:
+    name: Build for Apple Silicon (M-series)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: brew install sdl2
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES=arm64
+
+      - name: Build
+        run: cmake --build build --config Release -j "$(sysctl -n hw.ncpu)"
+
+      - name: Package release
+        run: |
+          TAG="${{ github.ref_name }}"
+          PKG="LegendOfNora-${TAG}-macos-arm64"
+          mkdir -p "dist/${PKG}"
+          cp build/LegendOfNora "dist/${PKG}/"
+          cp -R build/assets "dist/${PKG}/assets"
+
+          SDL_DYLIB="$(brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib"
+          if [ -f "${SDL_DYLIB}" ]; then
+            cp "${SDL_DYLIB}" "dist/${PKG}/"
+            install_name_tool -change "@rpath/libSDL2-2.0.0.dylib" "@executable_path/libSDL2-2.0.0.dylib" "dist/${PKG}/LegendOfNora"
+            install_name_tool -id "@executable_path/libSDL2-2.0.0.dylib" "dist/${PKG}/libSDL2-2.0.0.dylib"
+          fi
+
+          cd dist
+          zip -r "${PKG}.zip" "${PKG}"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LegendOfNora-${{ github.ref_name }}-macos-arm64
+          path: dist/LegendOfNora-${{ github.ref_name }}-macos-arm64.zip
+          if-no-files-found: error
+
+      - name: Upload GitHub Release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/LegendOfNora-${{ github.ref_name }}-macos-arm64.zip
+          generate_release_notes: true
