@@ -52,6 +52,7 @@ void FirstLevel::BeginGorillaEncounter()
     books.Deactivate();
     chimps.Deactivate();
     gorilla.Enter(scrollOffset, screenWidth, ground.GetFloorY());
+    levelMusic.BeginFadeOut(metadata::LEVEL1_MUSIC_FADE_DURATION);
 }
 
 void FirstLevel::KillPlayer()
@@ -93,10 +94,15 @@ void FirstLevel::Init()
     {
         TraceLog(LOG_WARNING, "FIRSTLEVEL: Failed to load background image: %s", backgroundPath);
     }
+
+    levelMusic.Load(metadata::LEVEL1_MUSIC.data());
+    levelMusic.Play();
 }
 
 void FirstLevel::Update()
 {
+    levelMusic.Update();
+
     const float dt = GetFrameTime();
 
     scrollOffset += FORWARD_SPEED * dt;
@@ -172,6 +178,8 @@ void FirstLevel::Draw()
 
 void FirstLevel::Cleanup()
 {
+    levelMusic.Unload();
+
     books.Cleanup();
     chimps.Cleanup();
     gorilla.Cleanup();

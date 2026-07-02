@@ -15,6 +15,10 @@ namespace metadata {
     const string_view GORILLA_TEXTURE{"assets/entities/gorilla_512.png"};
     const string_view ANGRY_CHIMP_TEXTURE{"assets/entities/angry-chimp.png"};
     const string_view NORA_TEXTURE{"assets/entities/nora-motorcycle.png"};
+    const string_view LEVEL1_MUSIC{"assets/music/level-1-copyright.ogg"};
+    const float LEVEL1_MUSIC_FADE_DURATION{2.5f};
+    const string_view LEVEL2_MUSIC{"assets/music/level-2-copyright.ogg"};
+    const float LEVEL2_MUSIC_FADE_DURATION{2.5f};
 
     const string_view GORILLA_SCENE_YELL{"assets/scenes/gorilla-background.jpg"};
     const string_view NORA_SCENE_INNOCENT{"assets/scenes/nora-background.jpg"};

@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 #include "assets/floating_bridge.hpp"
+#include "assets/level_music.hpp"
 #include "assets/ground.hpp"
 #include "book/book_spawner.hpp"
 #include "entities/angry_chimp_spawner.hpp"
@@ -14,7 +15,7 @@
 class SecondLevel
 {
 public:
-    void Init(int startingBooks = 0);
+    void Init(int startingBooks = 0, LevelMusic* music = nullptr);
     void Update();
     void Draw();
     void Cleanup();
@@ -30,6 +31,7 @@ private:
     bool playerDead = false;
     bool obstaclePhase = true;
     bool victoryRide = false;
+    bool victoryMusicFadeStarted = false;
     float victoryRideTimer = 0.0f;
 
     float playerX = 120.0f;
@@ -50,6 +52,7 @@ private:
     FloatingBridgeManager bridges{};
     AngryChimpSpawner groundChimps{};
     SlidingChimpSpawner slidingChimps{};
+    LevelMusic* levelMusic = nullptr;
 
     void DrawBackground();
     void UpdateSpeed();

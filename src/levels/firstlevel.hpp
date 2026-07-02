@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 #include "assets/ground.hpp"
+#include "assets/level_music.hpp"
 #include "book/book_spawner.hpp"
 #include "entities/angry_chimp_spawner.hpp"
 #include "entities/gorilla.hpp"
@@ -46,6 +47,7 @@ private:
     BookSpawner books{};
     AngryChimpSpawner chimps{};
     Gorilla gorilla{};
+    LevelMusic levelMusic{};
 
     void DrawBackground();
     void DrawScreenFade();

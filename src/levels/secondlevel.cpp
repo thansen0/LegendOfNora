@@ -201,15 +201,31 @@ void SecondLevel::UpdateVictoryRide(const float dt)
 
     jumpState.TryJump(playerVelY);
 
+    if (victoryRideTimer >= metadata::LEVEL2_VICTORY_RIDE_DURATION && !victoryMusicFadeStarted)
+    {
+        if (levelMusic != nullptr)
+        {
+            levelMusic->BeginFadeOut(metadata::LEVEL2_MUSIC_FADE_DURATION);
+        }
+        victoryMusicFadeStarted = true;
+    }
+
     if (victoryRideTimer >= metadata::LEVEL2_VICTORY_RIDE_DURATION)
     {
-        levelComplete = true;
-        running = false;
+        const bool musicFinished = levelMusic == nullptr || !levelMusic->IsLoaded() ||
+                                   levelMusic->HasFadedOut();
+        if (musicFinished)
+        {
+            levelComplete = true;
+            running = false;
+        }
     }
 }
 
-void SecondLevel::Init(const int startingBooks)
+void SecondLevel::Init(const int startingBooks, LevelMusic* music)
 {
+    levelMusic = music;
+
     screenWidth = GetScreenWidth();
     screenHeight = GetScreenHeight();
     running = true;
@@ -217,6 +233,7 @@ void SecondLevel::Init(const int startingBooks)
     playerDead = false;
     obstaclePhase = true;
     victoryRide = false;
+    victoryMusicFadeStarted = false;
     victoryRideTimer = 0.0f;
     speedMultiplier = 1.0f;
     scrollOffset = 0.0f;
@@ -243,10 +260,16 @@ void SecondLevel::Init(const int startingBooks)
     {
         TraceLog(LOG_WARNING, "SECONDLEVEL: Failed to load background image: %s", backgroundPath);
     }
+
 }
 
 void SecondLevel::Update()
 {
+    if (levelMusic != nullptr)
+    {
+        levelMusic->Update();
+    }
+
     if (playerDead)
     {
         return;

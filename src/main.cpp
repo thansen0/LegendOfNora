@@ -1,3 +1,4 @@
+#include "assets/level_music.hpp"
 #include "levels/firstlevel.hpp"
 #include "levels/secondlevel.hpp"
 #include "metadata/metadata.hpp"
@@ -19,7 +20,8 @@ namespace
         Advance,           // Level finished — continue to the next stage.
     };
 
-    bool RunTitleScreen(const TitleScreenType type, const int deathBooksCollected = -1)
+    bool RunTitleScreen(const TitleScreenType type, const int deathBooksCollected = -1,
+                        LevelMusic* music = nullptr)
     {
         TitleScreen screen;
         screen.Load(type);
@@ -31,6 +33,11 @@ namespace
 
         while (!screen.IsConfirmed() && !WindowShouldClose())
         {
+            if (music != nullptr)
+            {
+                music->Update();
+            }
+
             screen.Update();
             screen.Draw();
         }
@@ -91,7 +98,7 @@ namespace
         const std::vector<SceneData> allScenes = {
             {metadata::BOOK_GOD_JUDGMENT, "****  "},
             {metadata::NORA_SCENE_FATIGUED, "sooo.. who are you?"},
-            {metadata::BOOK_GOD_JUDGMENT, "I am Macombo II. I have lived in the Congo jungle since it \nwas called Zaire, and I have understanding beyond \nwhat you could ever conceive."},
+            {metadata::BOOK_GOD_JUDGMENT, "I am Macombo II. I have lived in the Congolese jungle since it \nwas called Zaire, and I have understanding beyond \nwhat you could ever conceive."},
             {metadata::NORA_SCENE_FATIGUED, "ok well if that's all may I go home now?"},
             {metadata::BOOK_GOD_JUDGMENT, "Absolutely not. You've come all this way, you must have a \nquestion for me."},
             {metadata::NORA_SCENE_FATIGUED, "not really.."},
@@ -165,10 +172,10 @@ namespace
     }
 
     // Runs the escalating second level.
-    LevelEnd RunSecondLevel(const int booksFromLevelOne, int& booksCollected)
+    LevelEnd RunSecondLevel(const int booksFromLevelOne, int& booksCollected, LevelMusic& music)
     {
         SecondLevel level;
-        level.Init(booksFromLevelOne);
+        level.Init(booksFromLevelOne, &music);
 
         while (!WindowShouldClose() && level.IsRunning())
         {
@@ -194,10 +201,26 @@ namespace
         return LevelEnd::Advance;
     }
 
-    // Shows the death screen before returning to the start menu or retrying level 2.
+    // Shows the death screen before returning to the start menu.
     void HandleDeath(const int booksCollected)
     {
         RunTitleScreen(TitleScreenType::Death, booksCollected);
+    }
+
+    // Level 2 death keeps music playing at reduced volume, then restores it for the retry.
+    void HandleLevel2Death(const int booksCollected, LevelMusic& music)
+    {
+        if (music.IsLoaded())
+        {
+            music.SetVolume(0.5f);
+        }
+
+        RunTitleScreen(TitleScreenType::Death, booksCollected, &music);
+
+        if (music.IsLoaded())
+        {
+            music.SetVolume(1.0f);
+        }
     }
 }
 
@@ -226,22 +249,28 @@ int main()
         }
 
         const int booksFromLevelOne = booksCollected;
+        LevelMusic level2Music;
+        level2Music.Load(metadata::LEVEL2_MUSIC.data());
+        level2Music.Play();
+
         LevelEnd secondEnd = LevelEnd::RetrySecondLevel;
 
         while (!WindowShouldClose())
         {
-            secondEnd = RunSecondLevel(booksFromLevelOne, booksCollected);
+            secondEnd = RunSecondLevel(booksFromLevelOne, booksCollected, level2Music);
             if (secondEnd == LevelEnd::Quit)
             {
                 break;
             }
             if (secondEnd == LevelEnd::RetrySecondLevel)
             {
-                HandleDeath(booksCollected);
+                HandleLevel2Death(booksCollected, level2Music);
                 continue;
             }
             break;
         }
+
+        level2Music.Unload();
 
         if (secondEnd == LevelEnd::Quit || WindowShouldClose())
         {
