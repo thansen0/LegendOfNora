@@ -12,7 +12,7 @@ Levels and cutscene logic should be placed in src/levels
 
 Characters should be placed in either the player folder or entities folder.
 
-Collectable items (such as the books) should be placed in the items folder.
+Collectible items (such as the books) should be placed in the items folder.
 
 If you feel a class doesn't fit an existing folder please make a new one.
 

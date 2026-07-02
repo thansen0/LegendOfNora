@@ -17,8 +17,8 @@ namespace metadata {
     const string_view NORA_TEXTURE{"assets/entities/nora-motorcycle.png"};
 
     const string_view GORILLA_SCENE_YELL{"assets/scenes/gorilla-background.jpg"};
-    const string_view NORA_SCENE_INOCENT{"assets/scenes/nora-background.jpg"};
-    const string_view BOOK_GOD_JUDGEMENT{"assets/scenes/white-gorilla-stare.jpg"};
+    const string_view NORA_SCENE_INNOCENT{"assets/scenes/nora-background.jpg"};
+    const string_view BOOK_GOD_JUDGMENT{"assets/scenes/white-gorilla-stare.jpg"};
     const string_view NORA_SCENE_FATIGUED{"assets/scenes/nora-background-ominous.jpg"};
     const string_view NORA_SCENE_THINKING{"assets/scenes/nora-background-ominous-thinking.jpg"};
     const string_view NORA_SCENE_AGREEING{"assets/scenes/nora-background-ominous-agree.jpg"};
@@ -55,6 +55,6 @@ namespace metadata {
     const int LEVEL2_FLOOD_BOOKS_PER_WAVE{10};
     const float LEVEL2_VICTORY_RIDE_DURATION{3.5f};
 
-    const int BOOKS_TO_COMPLETE_LVL1{42}; // reduced from {42}; for faster testing
-    const int BOOKS_TO_COMPLETE_LVL2{536}; //{534};
+    const int BOOKS_TO_COMPLETE_LVL1{42};
+    const int BOOKS_TO_COMPLETE_LVL2{536};
 }
