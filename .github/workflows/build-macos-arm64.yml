@@ -19,9 +19,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install dependencies
-        run: brew install sdl2
-
       - name: Configure CMake
         run: |
           cmake -B build \
@@ -38,13 +35,6 @@ jobs:
           mkdir -p "dist/${PKG}"
           cp build/LegendOfNora "dist/${PKG}/"
           cp -R build/assets "dist/${PKG}/assets"
-
-          SDL_DYLIB="$(brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib"
-          if [ -f "${SDL_DYLIB}" ]; then
-            cp "${SDL_DYLIB}" "dist/${PKG}/"
-            install_name_tool -change "@rpath/libSDL2-2.0.0.dylib" "@executable_path/libSDL2-2.0.0.dylib" "dist/${PKG}/LegendOfNora"
-            install_name_tool -id "@executable_path/libSDL2-2.0.0.dylib" "dist/${PKG}/libSDL2-2.0.0.dylib"
-          fi
 
           cd dist
           zip -r "${PKG}.zip" "${PKG}"

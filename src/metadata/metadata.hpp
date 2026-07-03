@@ -55,7 +55,7 @@ namespace metadata {
 
     const float LEVEL2_BASE_SPEED{200.0f};
     const float LEVEL2_SPEED_RAMP_SCALE{6500.0f};           // lower = speed ramps up faster
-    const float LEVEL2_OBSTACLE_CUTOFF_MULTIPLIER{3.55f};   // lower = book flood starts sooner
+    const float LEVEL2_OBSTACLE_CUTOFF_MULTIPLIER{3.75f};   // lower = book flood starts sooner
     const int LEVEL2_FLOOD_BOOKS_PER_WAVE{10};
     const float LEVEL2_VICTORY_RIDE_DURATION{3.5f};
 
