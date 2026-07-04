@@ -67,7 +67,7 @@ Assets are copied into `build/assets` automatically during the build.
 
 ## macOS Apple Silicon builds (GitHub Actions)
 
-Pushing a **git tag** triggers `.github/workflows/build-macos-arm64.yml`, which builds a native **arm64** binary on GitHub's macOS runners. That produces builds for Apple Silicon Macs (M1, M2, M3, M4, and later). Admittedly I don't have a mac and so these instructions were written by Grok.
+Pushing a **git tag** triggers `.github/workflows/build-macos-arm64.yml`, which builds a native **arm64** binary on GitHub's macOS runners. That produces builds for Apple Silicon Macs (M1, M2, M3, M4, and later). Admittedly I don't have a mac and so these instructions were written by AI.
 
 ### Files required in the repository
 

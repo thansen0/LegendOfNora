@@ -52,7 +52,10 @@ void FirstLevel::BeginGorillaEncounter()
     books.Deactivate();
     chimps.Deactivate();
     gorilla.Enter(scrollOffset, screenWidth, ground.GetFloorY());
-    levelMusic.BeginFadeOut(metadata::LEVEL1_MUSIC_FADE_DURATION);
+    if (levelMusic != nullptr)
+    {
+        levelMusic->BeginFadeOut(metadata::LEVEL1_MUSIC_FADE_DURATION);
+    }
 }
 
 void FirstLevel::KillPlayer()
@@ -66,8 +69,10 @@ void FirstLevel::KillPlayer()
     running = false;
 }
 
-void FirstLevel::Init()
+void FirstLevel::Init(LevelMusic* music)
 {
+    levelMusic = music;
+
     screenWidth = GetScreenWidth();
     screenHeight = GetScreenHeight();
     gorillaEncounter = false;
@@ -95,13 +100,14 @@ void FirstLevel::Init()
         TraceLog(LOG_WARNING, "FIRSTLEVEL: Failed to load background image: %s", backgroundPath);
     }
 
-    levelMusic.Load(metadata::LEVEL1_MUSIC.data());
-    levelMusic.Play();
 }
 
 void FirstLevel::Update()
 {
-    levelMusic.Update();
+    if (levelMusic != nullptr)
+    {
+        levelMusic->Update();
+    }
 
     const float dt = GetFrameTime();
 
@@ -178,8 +184,6 @@ void FirstLevel::Draw()
 
 void FirstLevel::Cleanup()
 {
-    levelMusic.Unload();
-
     books.Cleanup();
     chimps.Cleanup();
     gorilla.Cleanup();

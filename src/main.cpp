@@ -141,10 +141,10 @@ namespace
     }
 
     // Runs level one and, on success, the post-level cutscene.
-    LevelEnd RunFirstLevel(int& booksCollected)
+    LevelEnd RunFirstLevel(int& booksCollected, LevelMusic& music)
     {
         FirstLevel level;
-        level.Init();
+        level.Init(&music);
 
         while (!WindowShouldClose() && level.IsRunning())
         {
@@ -201,10 +201,20 @@ namespace
         return LevelEnd::Advance;
     }
 
-    // Shows the death screen before returning to the start menu.
-    void HandleDeath(const int booksCollected)
+    // Level 1 death keeps music playing at reduced volume, then restores it for the retry.
+    void HandleLevel1Death(const int booksCollected, LevelMusic& music)
     {
-        RunTitleScreen(TitleScreenType::Death, booksCollected);
+        if (music.IsLoaded())
+        {
+            music.SetVolume(0.5f);
+        }
+
+        RunTitleScreen(TitleScreenType::Death, booksCollected, &music);
+
+        if (music.IsLoaded())
+        {
+            music.SetVolume(1.0f);
+        }
     }
 
     // Level 2 death keeps music playing at reduced volume, then restores it for the retry.
@@ -229,24 +239,43 @@ int main()
     InitWindow(800, 600, "Legend of Nora");
     SetTargetFPS(60);
 
+    LevelMusic level1Music;
+    bool level1MusicActive = false;
+
     while (!WindowShouldClose())
     {
-        if (!RunTitleScreen(TitleScreenType::Start))
+        LevelMusic* startMenuMusic = level1MusicActive ? &level1Music : nullptr;
+        if (!RunTitleScreen(TitleScreenType::Start, -1, startMenuMusic))
         {
+            if (level1MusicActive)
+            {
+                level1Music.Unload();
+            }
             break;
         }
 
+        if (!level1MusicActive)
+        {
+            level1Music.Load(metadata::LEVEL1_MUSIC.data());
+            level1Music.Play();
+            level1MusicActive = true;
+        }
+
         int booksCollected = 0;
-        const LevelEnd firstEnd = RunFirstLevel(booksCollected);
+        const LevelEnd firstEnd = RunFirstLevel(booksCollected, level1Music);
         if (firstEnd == LevelEnd::Quit)
         {
+            level1Music.Unload();
             break;
         }
         if (firstEnd == LevelEnd::ReturnToStartMenu)
         {
-            HandleDeath(booksCollected);
+            HandleLevel1Death(booksCollected, level1Music);
             continue; // Back to the start menu — do not run level 2.
         }
+
+        level1Music.Unload();
+        level1MusicActive = false;
 
         const int booksFromLevelOne = booksCollected;
         LevelMusic level2Music;

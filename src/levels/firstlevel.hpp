@@ -14,7 +14,7 @@
 class FirstLevel
 {
 public:
-    void Init();
+    void Init(LevelMusic* music = nullptr);
     void Update();
     void Draw();
     void Cleanup();
@@ -47,7 +47,7 @@ private:
     BookSpawner books{};
     AngryChimpSpawner chimps{};
     Gorilla gorilla{};
-    LevelMusic levelMusic{};
+    LevelMusic* levelMusic = nullptr;
 
     void DrawBackground();
     void DrawScreenFade();
