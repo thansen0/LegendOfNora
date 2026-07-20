@@ -82,17 +82,6 @@ The workflow uses files already in this repo. You do not need to add secrets or 
 | `extern/raylib/` | raylib git submodule |
 | `.gitmodules` | Submodule configuration |
 
-### Create and push a release tag
-
-From your machine, after committing the workflow and pushing to GitHub:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-Any tag name works (`v1.0.0`, `0.2.0`, etc.). Only **tag pushes** run this workflow; ordinary commits to `master` do not. Tags trigger a github action to build for macOS arm64.
-
 ### Download the build
 
 1. Open the repository on GitHub → **Actions** → **Build macOS (Apple Silicon)** → select the run for your tag.

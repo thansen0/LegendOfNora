@@ -115,7 +115,7 @@ namespace
             {metadata::BOOK_GOD_JUDGMENT, "Do not listen to the zookeepers, they tell lies. Mosuba gave me \nhis word."},
             {metadata::BOOK_GOD_JUDGMENT, "You must attend the Asheboro Zoo and pet Mosuba exactly 42 times.\nThat is our ultimate purpose. The meaning of life."},
             {metadata::NORA_SCENE_THINKING, "hmm I guess you're right."},
-            {metadata::NORA_SCENE_AGREEING, "I, Game Player, promise to pet Mosuba next time I see him.\n\nPress (SPACE) to contractually agree."},
+            {metadata::NORA_SCENE_AGREEING, "I, the player of this game, agree to pet Mosuba when I see him.\n\nPress (SPACE) to contractually agree."},
 
         };
 
